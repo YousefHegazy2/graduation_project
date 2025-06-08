@@ -20,7 +20,7 @@ class CustomTextfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 45,
+      height: 50,
       child: TextFormField(
         style: const TextStyle(color: Colors.black),
         decoration: InputDecoration(

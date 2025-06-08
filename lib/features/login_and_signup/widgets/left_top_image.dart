@@ -8,9 +8,9 @@ class LeftTopImage extends StatelessWidget {
     return Positioned(
         top: 0,
         left: 0,
-        child: Container(
-          width: 181,
-          height: 165,
+        child: SizedBox(
+          width: 160,
+          height: 150,
           child: Image.asset(
             'assets/images/top screen design.png',
             fit: BoxFit.fill,
