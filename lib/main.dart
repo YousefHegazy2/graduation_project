@@ -4,11 +4,9 @@ import 'package:device_preview/device_preview.dart';
 import 'package:rentora_app/features/login_and_signup/views/signup_details.dart';
 import 'package:rentora_app/features/login_and_signup/views/signup_screen.dart';
 
-
-
 void main() => runApp(
       DevicePreview(
-        enabled: false,
+        enabled: true,
         builder: (context) => MyApp(),
       ),
     );
@@ -26,8 +24,6 @@ class MyApp extends StatelessWidget {
 
       // darkTheme: ThemeData.dark(),
 
-      //home: Homepage(),
-      //home: PinCodeScreen('0414848'),
       home: SignupDetails(),
     );
   }
