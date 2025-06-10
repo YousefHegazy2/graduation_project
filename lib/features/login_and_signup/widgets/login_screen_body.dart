@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rentora_app/features/login_and_signup/cubit/sinup_cubit.dart';
-import 'package:rentora_app/features/login_and_signup/views/login_screen.dart';
-import 'package:rentora_app/features/login_and_signup/views/pin_code_screen.dart';
+import 'package:rentora_app/features/login_and_signup/cubit/login_cubit.dart';
+import 'package:rentora_app/features/login_and_signup/views/forget_password_screen.dart';
+import 'package:rentora_app/features/login_and_signup/views/signup_screen.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_button.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_password_textfield.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_text.dart';
@@ -9,11 +10,9 @@ import 'package:rentora_app/features/login_and_signup/widgets/custom_text_textfi
 import 'package:rentora_app/features/login_and_signup/widgets/google_icon.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/left_top_image.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/main_text.dart';
-import 'package:rentora_app/features/login_and_signup/widgets/terms_and_conditions.dart';
-import 'package:flutter/material.dart';
 
-class SinupScreenBody extends StatelessWidget {
-  const SinupScreenBody({
+class loginscreenbody extends StatelessWidget {
+  const loginscreenbody({
     super.key,
   });
 
@@ -22,108 +21,116 @@ class SinupScreenBody extends StatelessWidget {
     return SingleChildScrollView(
       child: Stack(
         children: [
-          const LeftTopImage(),
+          LeftTopImage(),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 125),
             child: Form(
-              key: context.read<SinupCubit>().formKey,
+              key: context.read<LoginCubit>().formKey,
               child: Column(
                 children: [
+                  // ************** welcome text at the top of the screen
                   const MainText(
-                    text: 'Create Account',
+                    text: 'Welcome Back!',
                     fontsize: 40,
                     color: Colors.black,
                   ),
-              
-                  const SizedBox(height: 10),
-              
+
+                  SizedBox(height: 10),
+
                   // ************* the image in the screen
-                  Image.asset('assets/images/sign up.png'),
-              
-                  const SizedBox(height: 5),
-              
-                  //  ***************  the textfield for name
-                  const CustomText(text: 'Name'),
-                  CustomTextfield(
-                    hinttext: 'Enter your name',
-                    controller: context.read<SinupCubit>().nameController,
-                  ),
-              
-                  const SizedBox(height: 10),
-              
-                  //  ******************    the textfield for email
+                  Image.asset('assets/images/login.png'),
+
+                  SizedBox(height: 15),
+
+                  // ************* the first text field for ( Email )
                   const CustomText(text: 'Email'),
                   CustomTextfield(
                     hinttext: 'example@gmail.com',
-                    controller: context.read<SinupCubit>().emailController,
+                    controller: context.read<LoginCubit>().emailController,
                   ),
-              
-                  const SizedBox(height: 10),
-              
-                  //  ****************    the textfield for password
+
+                  SizedBox(height: 15),
+
+                  // *************  the second text field for ( Password )
                   const CustomText(text: 'Password'),
                   CustomPasswordTextfield(
-                    sufixicon: const Icon(Icons.visibility_off),
                     hinttext: 'Enter your password',
                     obscureText: true,
-                    controller: context.read<SinupCubit>().passwordController,
+                    sufixicon: Icon(Icons.remove_red_eye_outlined),
+                    controller: context.read<LoginCubit>().passwordController,
                   ),
-              
-                  //  **************    the terms and conditions row
-                  const TermsAndConditions(),
-              
+
+                  SizedBox(height: 5),
+
+                  //  ***************  the forget password text
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return ForgetPasswordScreen();
+                            },
+                          ));
+                        },
+                        child: const Text(
+                          'Forget Password?',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+
                   //  ******************   the Login button
                   CustomButton(
-                    buttonName: 'Sign up',
+                    buttonName: 'Login',
                     onpressed: () {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
-                          return PinCodeScreen('');
+                          return ForgetPasswordScreen();
                         },
                       ));
                     },
                   ),
-                  const SizedBox(height: 5),
-              
+                  const SizedBox(height: 15),
+
                   const Text(
                     'Or sign in with',
                     style: TextStyle(color: Colors.grey, fontSize: 15),
                   ),
-              
+
                   //   *****************  the google icon
                   const GoogleIcon(),
-              
+
                   //  ********************  the Don't have an account? row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Already have an account? ',
+                        'Don\'t have an account? ',
                         style: TextStyle(color: Colors.grey, fontSize: 15),
                       ),
                       InkWell(
                         onTap: () {
-                          context.read<SinupCubit>().sinup(
+                          context.read<LoginCubit>().login(
                               email: context
-                                  .read<SinupCubit>()
-                                  .passwordController
+                                  .read<LoginCubit>()
+                                  .emailController
                                   .text,
                               password: context
-                                  .read<SinupCubit>()
-                                  .passwordController
-                                  .text,
-                              name: context
-                                  .read<SinupCubit>()
+                                  .read<LoginCubit>()
                                   .passwordController
                                   .text);
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {
-                              return const LoginScreen();
+                              return SignupScreen();
                             },
                           ));
                         },
                         child: const Text(
-                          ' Login',
+                          ' Sign up',
                           style: TextStyle(color: Colors.blue, fontSize: 15),
                         ),
                       )
@@ -132,7 +139,7 @@ class SinupScreenBody extends StatelessWidget {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
