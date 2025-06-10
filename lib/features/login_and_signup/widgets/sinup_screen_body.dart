@@ -103,19 +103,7 @@ class SinupScreenBody extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          context.read<SinupCubit>().sinup(
-                              email: context
-                                  .read<SinupCubit>()
-                                  .passwordController
-                                  .text,
-                              password: context
-                                  .read<SinupCubit>()
-                                  .passwordController
-                                  .text,
-                              name: context
-                                  .read<SinupCubit>()
-                                  .passwordController
-                                  .text);
+                       
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {
                               return const LoginScreen();
