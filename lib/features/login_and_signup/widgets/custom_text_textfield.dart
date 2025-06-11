@@ -22,6 +22,8 @@ class CustomTextfield extends StatelessWidget {
     return SizedBox(
       height: 50,
       child: TextFormField(
+        controller: controller,
+        validator: (value) => value!.isEmpty ? 'Please enter your $labeltext' : null,
         style: const TextStyle(color: Colors.black),
         decoration: InputDecoration(
           hintText: hinttext,

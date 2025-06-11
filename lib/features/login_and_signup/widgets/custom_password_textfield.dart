@@ -23,6 +23,8 @@ class CustomPasswordTextfield extends StatelessWidget {
     return SizedBox(
       height: 50,
       child: TextFormField(
+        validator: (value) => value!.isEmpty ? 'Please enter your password' : null,
+        keyboardType: TextInputType.visiblePassword,
         textAlign: TextAlign.start,
         
         controller: controller,

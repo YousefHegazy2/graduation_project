@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:rentora_app/cores/databases/api/api_consumer.dart';
 import 'package:rentora_app/cores/databases/api/endpoints.dart';
 import 'package:rentora_app/cores/errors/expentions.dart';
@@ -13,8 +14,7 @@ class LoginAndSinupRepo {
 
   Future<Either<Failure, LoginResponse>> sinup(SignupParams signupParams) async {
     try {
-  final response =
-      await apiConsumer.post(path: Endpoints.sinup, isFormData: true, data: {
+      final data =FormData.fromMap({
     'ProfileImage': signupParams.profileImage,
     'IDImageFront': signupParams.idImageFront,
     'IDImageBack': signupParams.idImageBack,
@@ -28,7 +28,14 @@ class LoginAndSinupRepo {
     'PhoneNumber': signupParams.phoneNumber,
     'Governorate': signupParams.governorate,
     'Town': signupParams.town,
-    'Address': signupParams.address, });
+    'Address': signupParams.address, }
+      );
+  final response =
+      await apiConsumer.post(
+        
+        path: Endpoints.sinup , 
+        isFormData: true
+        ,data: data);
 return response.fold(
   (l) => Left(Failure(errMessage: l)),
   (r) => Right(LoginResponse.fromJson(r.data)),

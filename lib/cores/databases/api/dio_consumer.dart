@@ -43,7 +43,7 @@ class DioConsumer implements ApiConsumer {
   @override
   Future<Either<String, Response>> post({String? path, Object? data, Map<String, dynamic>? queryParameters, bool isFormData = false}) async {
     try {
-      final response = await dio.post(path!, data: data, queryParameters: queryParameters);
+      final response = await dio.post(path!, data: data, queryParameters: queryParameters,options: isFormData ? Options(contentType: 'application/x-www-form-urlencoded') : null);
       return Right(response);
     } catch (e) {
       return Left(e.toString());

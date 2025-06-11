@@ -8,28 +8,32 @@ part 'sinup_state.dart';
 class SinupCubit extends Cubit<SinupState> {
   final LoginAndSinupRepo loginAndSinupRepo;
   SinupCubit(this.loginAndSinupRepo) : super(SinupInitial());
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController firstnameController = TextEditingController();
+  final TextEditingController lastnameController = TextEditingController();
+  final TextEditingController nationalidController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController frontsideidController = TextEditingController();
+  final TextEditingController backsideidController = TextEditingController();
+  final TextEditingController addresscontroller = TextEditingController();
+  TextEditingController personalsammaryController = TextEditingController();
+
+  final GlobalKey<FormState> formKey2 = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final nameController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-
-
-
-
   Future<void> sinup(SignupParams signupParams) async {
-    if (formKey.currentState!.validate()) {
+    if (formKey2.currentState!.validate()) {
       emit(SinupLoading());
 
       loginAndSinupRepo.sinup(signupParams).then((value) {
         value.fold(
           (failure) => emit(SinupFailure(error: failure.errMessage)),
-
-
           (loginResponse) {
             if (loginResponse.succeeded == false) {
               emit(SinupFailure(error: loginResponse.message));
-            }else {
+            } else {
               emit(SinupSuccess(massage: loginResponse.message));
             }
           },

@@ -4,12 +4,14 @@ import 'package:rentora_app/cores/databases/cache/cache_helper.dart';
 import 'package:rentora_app/features/login_and_signup/views/signup_details.dart';
 import 'package:rentora_app/features/login_and_signup/views/signup_screen.dart';
 
+
+
 void main() {
     WidgetsFlutterBinding.ensureInitialized(); // مهم لتأجيل التشغيل
    CacheHelper().init(); // استدعاء دالة إعداد موفر الخدمة
   runApp(
       DevicePreview(
-        enabled: true,
+        enabled: false,
         builder: (context) => MyApp(),
       ),
     );
@@ -29,7 +31,7 @@ void main() {
 
       //home: Homepage(),
       //home: PinCodeScreen('0414848'),
-      home: SignupDetails(),
+      home: SignupScreen(),
     );
   }
 }

@@ -11,11 +11,12 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
-      child: Scaffold(
-        body: BlocProvider(
-          create: (context) => SinupCubit(LoginAndSinupRepo(DioConsumer(dio: Dio()))),
-          child: const SinupScreenBody(),
+    return SafeArea(
+      child: BlocProvider(
+        create: (context) =>
+            SinupCubit(LoginAndSinupRepo(DioConsumer(dio: Dio()))),
+        child: Scaffold(
+          body:  SinupScreenBody(),
         ),
       ),
     );
