@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rentora_app/cores/params/login_params.dart';
+import 'package:rentora_app/features/login_and_signup/model/login_model.dart';
 import 'package:rentora_app/features/login_and_signup/repositery/login_and_sinup_repo.dart';
 
 part 'login_state.dart';
@@ -24,7 +25,7 @@ class LoginCubit extends Cubit<LoginState> {
             if (loginResponse.succeeded == false) {
               emit(LoginFailure(error: loginResponse.message));
             } else {
-              emit(LoginSuccess(massage: loginResponse.message));
+              emit(LoginSuccess(massage: loginResponse));
             }
           },
         );

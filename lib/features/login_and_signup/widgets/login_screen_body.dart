@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rentora_app/cores/databases/cache/cache_helper.dart';
 import 'package:rentora_app/cores/params/login_params.dart';
+import 'package:rentora_app/cores/vaildators/validator.dart';
+import 'package:rentora_app/features/Home/views/HomePage.dart';
 import 'package:rentora_app/features/login_and_signup/cubit/login_cubit.dart';
 import 'package:rentora_app/features/login_and_signup/views/forget_password_screen.dart';
 import 'package:rentora_app/features/login_and_signup/views/signup_screen.dart';
@@ -22,8 +25,14 @@ class loginscreenbody extends StatelessWidget {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.massage)),
+         CacheHelper.sharedPreferences.setString('token', state.massage.data!.token);
+      final token =   CacheHelper.sharedPreferences.getString('token');
+          print('Token: $token');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Homepage(),
+            ),
           );
         } else if (state is LoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -60,6 +69,7 @@ class loginscreenbody extends StatelessWidget {
                     // ************* the first text field for ( Email )
                     const CustomText(text: 'Email'),
                     CustomTextfield(
+                      validator: (value) => Validator.validateEmail(value),
                       hinttext: 'example@gmail.com',
                       controller: context.read<LoginCubit>().emailController,
                     ),
@@ -70,6 +80,7 @@ class loginscreenbody extends StatelessWidget {
                     const CustomText(text: 'Password'),
                     CustomPasswordTextfield(
                       hinttext: 'Enter your password',
+                      validator: (value) => Validator.validatePassword(value),
                       obscureText: true,
                       sufixicon: Icon(Icons.remove_red_eye_outlined),
                       controller: context.read<LoginCubit>().passwordController,
@@ -96,21 +107,40 @@ class loginscreenbody extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(height: 15),
+                    BlocBuilder<LoginCubit, LoginState>(
+                      builder: (context, state) {
+                        return state is LoginFailure
+                            ? Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(state.error,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(color: Colors.red)),
+                            )
+                            : Container();
+                      },
+                    ),
                     const SizedBox(height: 15),
 
                     //  ******************   the Login button
                     CustomButton(
                       buttonName: 'Login',
                       onpressed: () {
-                        LoginParams(
-                            email: context
-                                .read<LoginCubit>()
-                                .emailController
-                                .text,
-                            password: context
-                                .read<LoginCubit>()
-                                .passwordController
-                                .text);
+                        context.read<LoginCubit>().login(
+                              LoginParams(
+                                email: context
+                                    .read<LoginCubit>()
+                                    .emailController
+                                    .text,
+                                password: context
+                                    .read<LoginCubit>()
+                                    .passwordController
+                                    .text,
+                              ),
+                            );
+                            context.read<LoginCubit>().emailController.clear();
+                            context.read<LoginCubit>().passwordController.clear();
+
                       },
                     ),
                     const SizedBox(height: 15),

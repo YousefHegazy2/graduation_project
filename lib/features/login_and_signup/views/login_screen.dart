@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:rentora_app/cores/databases/api/dio_consumer.dart';
 import 'package:rentora_app/features/login_and_signup/cubit/login_cubit.dart';
 import 'package:rentora_app/features/login_and_signup/repositery/login_and_sinup_repo.dart';
@@ -17,10 +18,15 @@ class LoginScreen extends StatelessWidget {
         body: BlocProvider(
           create: (context) =>
               LoginCubit(LoginAndSinupRepo(DioConsumer(dio: Dio()))),
-          child: loginscreenbody(),
+          child: BlocBuilder<LoginCubit, LoginState>(
+            builder: (context, state) {
+              return ModalProgressHUD(
+                inAsyncCall: state is LoginLoading,
+                child: loginscreenbody());
+            },
+          ),
         ),
       ),
     );
   }
 }
-

@@ -51,12 +51,12 @@ return response.fold(
 
  Future<Either<Failure, LoginModel>> login(LoginParams loginParams)async {
   try {
-     final data = FormData.fromMap({
+     final data ={
         'email': loginParams.email,
         'password': loginParams.password,
-      });
+      };
       final response = await apiConsumer.post(
-          path: Endpoints.login, isFormData: true, data: data);
+          path: Endpoints.login,  data: data);
       return response.fold(
         (l) => Left(Failure(errMessage: l)),
         (r) => Right(LoginModel.fromJson(r.data)),

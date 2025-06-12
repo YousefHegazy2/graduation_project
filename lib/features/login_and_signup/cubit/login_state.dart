@@ -7,7 +7,7 @@ final class LoginInitial extends LoginState {}
 final class LoginLoading extends LoginState {}
 
 final class LoginSuccess extends LoginState {
-  final String massage;
+  final LoginModel massage;
 
   LoginSuccess({required this.massage});
 }

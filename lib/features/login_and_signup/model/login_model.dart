@@ -26,7 +26,7 @@ class LoginData {
   factory LoginData.fromJson(Map<String, dynamic> json) {
     return LoginData(
       id: json['id'],
-      message: json['message'],
+      message: json['message']?? '', // Handle null message gracefully
       isAuthenticated: json[
           'isAuthinticated'], // Note: keep the typo if it exists in the API
       username: json['username'],
