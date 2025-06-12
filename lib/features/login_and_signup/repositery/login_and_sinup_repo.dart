@@ -4,8 +4,10 @@ import 'package:rentora_app/cores/databases/api/api_consumer.dart';
 import 'package:rentora_app/cores/databases/api/endpoints.dart';
 import 'package:rentora_app/cores/errors/expentions.dart';
 import 'package:rentora_app/cores/errors/failure.dart';
+import 'package:rentora_app/cores/params/login_params.dart';
 import 'package:rentora_app/cores/params/sinup_params.dart';
 import 'package:rentora_app/features/login_and_signup/model/login_and_sinup_model.dart';
+import 'package:rentora_app/features/login_and_signup/model/login_model.dart';
 
 class LoginAndSinupRepo {
   final ApiConsumer apiConsumer;
@@ -46,12 +48,4 @@ return response.fold(
       }
   
 }
-
-
-
-
-
-
-
-
 }

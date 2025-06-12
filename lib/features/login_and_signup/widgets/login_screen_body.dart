@@ -114,15 +114,6 @@ class loginscreenbody extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          context.read<LoginCubit>().login(
-                              email: context
-                                  .read<LoginCubit>()
-                                  .emailController
-                                  .text,
-                              password: context
-                                  .read<LoginCubit>()
-                                  .passwordController
-                                  .text);
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {
                               return SignupScreen();
