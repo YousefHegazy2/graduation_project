@@ -1,4 +1,4 @@
-class LoginResponse {
+class SignupModel{
   final int statusCode;
   final dynamic meta;
   final bool succeeded;
@@ -6,7 +6,7 @@ class LoginResponse {
   final Map<String, List<String>>? errors;
   final dynamic data;
 
-  LoginResponse({
+  SignupModel({
     required this.statusCode,
     this.meta,
     required this.succeeded,
@@ -15,8 +15,8 @@ class LoginResponse {
     this.data,
   });
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) {
-    return LoginResponse(
+  factory SignupModel.fromJson(Map<String, dynamic> json) {
+    return SignupModel(
       statusCode: json['statusCode'] ?? json['StatusCode'] ?? 0,
       meta: json['meta'] ?? json['Meta'],
       succeeded: json['succeeded'] ?? json['Succeeded'] ?? false,

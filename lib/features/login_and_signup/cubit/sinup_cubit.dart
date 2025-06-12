@@ -30,11 +30,11 @@ class SinupCubit extends Cubit<SinupState> {
       loginAndSinupRepo.sinup(signupParams).then((value) {
         value.fold(
           (failure) => emit(SinupFailure(error: failure.errMessage)),
-          (loginResponse) {
-            if (loginResponse.succeeded == false) {
-              emit(SinupFailure(error: loginResponse.message));
+          (signupModel) {
+            if (signupModel.succeeded == false) {
+              emit(SinupFailure(error: signupModel.message));
             } else {
-              emit(SinupSuccess(massage: loginResponse.message));
+              emit(SinupSuccess(massage: signupModel.message));
             }
           },
         );

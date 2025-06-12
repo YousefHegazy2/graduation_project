@@ -1,6 +1,6 @@
 
 
-class SignupFormValidator {
+class Validator {
   static String? validateFirstName(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Please enter your first name';
@@ -37,13 +37,15 @@ class SignupFormValidator {
 
 
   static String? validatePassword(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your password';
-    } else if (value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
-    return null;
+  if (value == null || value.trim().isEmpty) {
+    return 'Please enter your password';
+  } else if (value.length < 6) {
+    return 'Password must be at least 6 characters';
+  } else if (!RegExp(r'[a-z]').hasMatch(value)) {
+    return 'Password must contain at least one lowercase letter';
   }
+  return null;
+}
 
   static String? validateNationalID(String? value) {
     if (value == null || value.trim().isEmpty) {

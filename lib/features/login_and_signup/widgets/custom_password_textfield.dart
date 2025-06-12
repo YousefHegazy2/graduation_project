@@ -8,6 +8,7 @@ class CustomPasswordTextfield extends StatelessWidget {
  final bool obscureText ;
  final Icon? sufixicon;
   final TextEditingController controller;
+  final FormFieldValidator<String>? validator;
 
  const CustomPasswordTextfield({
     super.key,
@@ -15,7 +16,7 @@ class CustomPasswordTextfield extends StatelessWidget {
     this.labeltext,
     this.obscureText = false,
     this.sufixicon,
-    required this.controller,
+    required this.controller, this.validator,
   });
 
   @override
@@ -23,7 +24,7 @@ class CustomPasswordTextfield extends StatelessWidget {
     return SizedBox(
       height: 50,
       child: TextFormField(
-        validator: (value) => value!.isEmpty ? 'Please enter your password' : null,
+        validator: validator,
         keyboardType: TextInputType.visiblePassword,
         textAlign: TextAlign.start,
         

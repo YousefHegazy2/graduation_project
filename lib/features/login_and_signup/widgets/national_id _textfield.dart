@@ -22,6 +22,7 @@ class NationalIdTextField extends StatelessWidget {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        
         controller: controller,
         keyboardType: TextInputType.number, // Allow only numbers
         maxLength: 14, // Restrict input to 14 characters

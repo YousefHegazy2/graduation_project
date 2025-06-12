@@ -8,7 +8,7 @@ class CustomTextfield extends StatelessWidget {
     this.labeltext,
     this.obscureText = false,
     this.sufixicon,
-    required this.controller,
+    required this.controller, this.validator,
   });
 
   final String? hinttext;
@@ -16,14 +16,14 @@ class CustomTextfield extends StatelessWidget {
   bool obscureText = false;
   Icon? sufixicon;
   final TextEditingController controller;
-
+final FormFieldValidator<String>? validator;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
       child: TextFormField(
         controller: controller,
-        validator: (value) => value!.isEmpty ? 'Please enter your $labeltext' : null,
+     validator: validator,
         style: const TextStyle(color: Colors.black),
         decoration: InputDecoration(
           hintText: hinttext,

@@ -1,10 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rentora_app/cores/databases/api/dio_consumer.dart';
+import 'package:rentora_app/cores/vaildators/validator.dart';
 import 'package:rentora_app/features/login_and_signup/cubit/sinup_cubit.dart';
-import 'package:rentora_app/features/login_and_signup/repositery/login_and_sinup_repo.dart';
 import 'package:rentora_app/features/login_and_signup/views/login_screen.dart';
-import 'package:rentora_app/features/login_and_signup/views/pin_code_screen.dart';
 import 'package:rentora_app/features/login_and_signup/views/signup_details.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_button.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_password_textfield.dart';
@@ -50,6 +47,7 @@ class SinupScreenBody extends StatelessWidget {
                   //  ***************  the textfield for name
                   const CustomText(text: 'Name'),
                   CustomTextfield(
+                    validator: (value) => Validator.validateUsername(value),
                     hinttext: 'Enter your name',
                     controller: context.read<SinupCubit>().nameController,
                   ),
@@ -59,6 +57,7 @@ class SinupScreenBody extends StatelessWidget {
                   //  ******************    the textfield for email
                   const CustomText(text: 'Email'),
                   CustomTextfield(
+                    validator: (v)=>Validator.validateEmail(v),
                     hinttext: 'example@gmail.com',
                     controller: context.read<SinupCubit>().emailController,
                   ),
@@ -68,6 +67,7 @@ class SinupScreenBody extends StatelessWidget {
                   //  ****************    the textfield for password
                   const CustomText(text: 'Password'),
                   CustomPasswordTextfield(
+                    validator: (v) => Validator.validatePassword(v),
                     sufixicon: const Icon(Icons.visibility_off),
                     hinttext: 'Enter your password',
                     obscureText: true,

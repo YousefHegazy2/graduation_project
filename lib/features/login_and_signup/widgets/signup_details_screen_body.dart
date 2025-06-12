@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentora_app/cores/params/sinup_params.dart';
+import 'package:rentora_app/cores/vaildators/validator.dart';
 import 'package:rentora_app/cores/widgets/Custom_Row_Dropdown.dart';
 import 'package:rentora_app/features/login_and_signup/cubit/sinup_cubit.dart';
-import 'package:rentora_app/features/login_and_signup/views/pin_code_screen.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/arrow_back.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_button.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_text_textfield.dart';
@@ -35,21 +35,20 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SinupCubit, SinupState>(
-      listener: (context, state) {
-        if (state is SinupSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.massage)),
-          );
-        } else if (state is SinupFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content:
-                    Text(state.error, style: TextStyle(color: Colors.white))),
-          );
-        }
-      },
-      
-        child:  Form(
+        listener: (context, state) {
+          if (state is SinupSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.massage)),
+            );
+          } else if (state is SinupFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content:
+                      Text(state.error, style: TextStyle(color: Colors.white))),
+            );
+          }
+        },
+        child: Form(
           key: context.read<SinupCubit>().formKey2,
           child: SingleChildScrollView(
             child: Padding(
@@ -79,12 +78,16 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTextfield(
+                            validator: (value) =>
+                                Validator.validateFirstName(value),
                             controller:
                                 context.read<SinupCubit>().firstnameController,
                             labeltext: 'First Name',
                           ),
                           SizedBox(height: 15),
                           CustomTextfield(
+                            validator: (value) =>
+                                Validator.validateLastName(value),
                             controller:
                                 context.read<SinupCubit>().lastnameController,
                             labeltext: 'Last Name',
@@ -125,6 +128,7 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                             hinttext: 'Browse back side of ID card ',
                             onImageSelected: (File) {
                               idImageFront = File;
+                              print('Image selected: ${File.path}');
                             },
                           ),
                           SizedBox(height: 15),
@@ -138,6 +142,8 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                               text3: 'Governerate', text4: 'Town'),
                           SizedBox(height: 15),
                           CustomTextfield(
+                            validator: (value) =>
+                                Validator.validateAddress(value),
                             controller:
                                 context.read<SinupCubit>().addresscontroller,
                             hinttext: 'Address',
@@ -149,20 +155,37 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                             onpressed: () async {
                               if (profileImage != null &&
                                   idImageFront != null) {
+                                final v = await MultipartFile.fromFile(
+                                    profileImage!.path,
+                                    contentType: DioMediaType(
+                                        "image", "JPEG"), // أو png حسب الصيغة
+
+                                    filename: 'profile.JPEG');
+                                print('Profile image: ${v}');
                                 context.read<SinupCubit>().sinup(
                                       SignupParams(
                                         profileImage:
                                             await MultipartFile.fromFile(
                                                 profileImage!.path,
-                                                filename: 'profile.jpg'),
+                                                contentType: DioMediaType(
+                                                    "image",
+                                                    "JPEG"), // أو png حسب الصيغة
+
+                                                filename: 'profile.JPEG'),
                                         idImageFront:
                                             await MultipartFile.fromFile(
                                                 idImageFront!.path,
-                                                filename: 'id_front.jpg'),
+                                                  contentType: DioMediaType(
+                                                    "image",
+                                                    "JPEG"), 
+                                                filename: 'id_front.JPEG'),
                                         idImageBack: await MultipartFile.fromFile(
                                             idImageFront!.path,
+                                              contentType: DioMediaType(
+                                                    "image",
+                                                    "JPEG"), 
                                             filename:
-                                                'id_back.jpg'), // لو عندك صورة مختلفة للظهر، عدلها هنا
+                                                'id_back.JPEG'), // لو عندك صورة مختلفة للظهر، عدلها هنا
 
                                         firstName: context
                                             .read<SinupCubit>()
@@ -187,7 +210,7 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                                             .read<SinupCubit>()
                                             .phoneController
                                             .text,
-                                        governorate: '',
+                                        governorate: '1234',
                                         town: 'own',
                                         address: context
                                             .read<SinupCubit>()
@@ -210,8 +233,6 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
               ),
             ),
           ),
-        )
-    
-    );
+        ));
   }
 }

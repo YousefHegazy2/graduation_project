@@ -6,7 +6,7 @@ import 'package:rentora_app/cores/errors/expentions.dart';
 import 'package:rentora_app/cores/errors/failure.dart';
 import 'package:rentora_app/cores/params/login_params.dart';
 import 'package:rentora_app/cores/params/sinup_params.dart';
-import 'package:rentora_app/features/login_and_signup/model/login_and_sinup_model.dart';
+import 'package:rentora_app/features/login_and_signup/model/signup_model.dart';
 import 'package:rentora_app/features/login_and_signup/model/login_model.dart';
 
 class LoginAndSinupRepo {
@@ -14,7 +14,7 @@ class LoginAndSinupRepo {
   LoginAndSinupRepo(this.apiConsumer);
 
 
-  Future<Either<Failure, LoginResponse>> sinup(SignupParams signupParams) async {
+  Future<Either<Failure, SignupModel>> sinup(SignupParams signupParams) async {
     try {
       final data =FormData.fromMap({
     'ProfileImage': signupParams.profileImage,
@@ -23,7 +23,7 @@ class LoginAndSinupRepo {
     'FirstName': signupParams.firstName,
     'LastName': signupParams.lastName,
     'UserName': signupParams.userName,
-    'EmailConfirmed': signupParams.emailConfirmed,
+    'Email': signupParams.emailConfirmed,
     'Password': signupParams.password,
     'NationalID': signupParams.nationalID,
     'Personal_summary': signupParams.personalSummary,
@@ -40,7 +40,7 @@ class LoginAndSinupRepo {
         ,data: data);
 return response.fold(
   (l) => Left(Failure(errMessage: l)),
-  (r) => Right(LoginResponse.fromJson(r.data)),
+  (r) => Right(SignupModel.fromJson(r.data)),
 );
  
 }  on CacheExeption catch (e) {
