@@ -34,7 +34,7 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
   File? idImageFront;
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SinupCubit, SinupState>(
+    return BlocListener<SinupCubit, SinupState>(
       listener: (context, state) {
         if (state is SinupSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -48,8 +48,8 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
           );
         }
       },
-      builder: (context, state) {
-        return Form(
+      
+        child:  Form(
           key: context.read<SinupCubit>().formKey2,
           child: SingleChildScrollView(
             child: Padding(
@@ -210,8 +210,8 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
               ),
             ),
           ),
-        );
-      },
+        )
+    
     );
   }
 }
