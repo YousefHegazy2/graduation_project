@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentora_app/cores/params/sinup_params.dart';
@@ -11,7 +14,7 @@ import 'package:rentora_app/features/login_and_signup/widgets/image_upload_field
 import 'package:rentora_app/features/login_and_signup/widgets/main_text.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/national_id%20_textfield.dart';
 
-class SignUpDetailsBody extends StatelessWidget {
+class SignUpDetailsBody extends StatefulWidget {
   const SignUpDetailsBody({
     super.key,
     required this.name,
@@ -21,21 +24,29 @@ class SignUpDetailsBody extends StatelessWidget {
   final String name;
   final String email;
   final String password;
+
+  @override
+  State<SignUpDetailsBody> createState() => _SignUpDetailsBodyState();
+}
+
+class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
+  File? profileImage;
+  File? idImageFront;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SinupCubit, SinupState>(
       listener: (context, state) {
-     if (state is SinupSuccess) {
+        if (state is SinupSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.massage)),
           );
         } else if (state is SinupFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
-       
-            SnackBar(content: Text(state.error, style: TextStyle(color: Colors.white))),
+            SnackBar(
+                content:
+                    Text(state.error, style: TextStyle(color: Colors.white))),
           );
-       
-     }
+        }
       },
       builder: (context, state) {
         return Form(
@@ -105,10 +116,17 @@ class SignUpDetailsBody extends StatelessWidget {
                           ),
                           SizedBox(height: 15),
                           ImageUploadField(
+                              onImageSelected: (p0) {
+                                profileImage = p0;
+                              },
                               hinttext: 'Browse front side of ID card '),
                           SizedBox(height: 15),
                           ImageUploadField(
-                              hinttext: 'Browse back side of ID card '),
+                            hinttext: 'Browse back side of ID card ',
+                            onImageSelected: (File) {
+                              idImageFront = File;
+                            },
+                          ),
                           SizedBox(height: 15),
                           const MainText(
                             text: 'Personal address',
@@ -116,7 +134,8 @@ class SignUpDetailsBody extends StatelessWidget {
                             color: Colors.black,
                           ),
                           SizedBox(height: 5),
-                          CustomRowDropdown(text3: 'Governerate', text4: 'Town'),
+                          CustomRowDropdown(
+                              text3: 'Governerate', text4: 'Town'),
                           SizedBox(height: 15),
                           CustomTextfield(
                             controller:
@@ -127,43 +146,62 @@ class SignUpDetailsBody extends StatelessWidget {
                           Center(
                               child: CustomButton(
                             buttonName: 'Sign up',
-                            onpressed: () {
-                              context.read<SinupCubit>().sinup(
-                                    SignupParams(
-                                      profileImage: 'sss',
-                                      idImageFront: 'ddddd',
-                                      idImageBack: 'idImageBack',
-                                      firstName: context
-                                          .read<SinupCubit>()
-                                          .firstnameController
-                                          .text,
-                                      lastName: context
-                                          .read<SinupCubit>()
-                                          .lastnameController
-                                          .text,
-                                      userName: name,
-                                      emailConfirmed: email,
-                                      password: password,
-                                      nationalID: context
-                                          .read<SinupCubit>()
-                                          .nationalidController
-                                          .text,
-                                      personalSummary: context
-                                          .read<SinupCubit>()
-                                          .personalsammaryController
-                                          .text,
-                                      phoneNumber: context
-                                          .read<SinupCubit>()
-                                          .phoneController
-                                          .text,
-                                      governorate: '',
-                                      town: 'own',
-                                      address: context
-                                          .read<SinupCubit>()
-                                          .addresscontroller
-                                          .text,
-                                    ),
-                                  );
+                            onpressed: () async {
+                              if (profileImage != null &&
+                                  idImageFront != null) {
+                                context.read<SinupCubit>().sinup(
+                                      SignupParams(
+                                        profileImage:
+                                            await MultipartFile.fromFile(
+                                                profileImage!.path,
+                                                filename: 'profile.jpg'),
+                                        idImageFront:
+                                            await MultipartFile.fromFile(
+                                                idImageFront!.path,
+                                                filename: 'id_front.jpg'),
+                                        idImageBack: await MultipartFile.fromFile(
+                                            idImageFront!.path,
+                                            filename:
+                                                'id_back.jpg'), // لو عندك صورة مختلفة للظهر، عدلها هنا
+
+                                        firstName: context
+                                            .read<SinupCubit>()
+                                            .firstnameController
+                                            .text,
+                                        lastName: context
+                                            .read<SinupCubit>()
+                                            .lastnameController
+                                            .text,
+                                        userName: widget.name,
+                                        emailConfirmed: widget.email,
+                                        password: widget.password,
+                                        nationalID: context
+                                            .read<SinupCubit>()
+                                            .nationalidController
+                                            .text,
+                                        personalSummary: context
+                                            .read<SinupCubit>()
+                                            .personalsammaryController
+                                            .text,
+                                        phoneNumber: context
+                                            .read<SinupCubit>()
+                                            .phoneController
+                                            .text,
+                                        governorate: '',
+                                        town: 'own',
+                                        address: context
+                                            .read<SinupCubit>()
+                                            .addresscontroller
+                                            .text,
+                                      ),
+                                    );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text('يرجى اختيار الصور المطلوبة')),
+                                );
+                              }
                             },
                           )),
                         ],

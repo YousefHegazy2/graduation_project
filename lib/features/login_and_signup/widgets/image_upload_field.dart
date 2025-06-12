@@ -1,15 +1,19 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rentora_app/constant.dart';
 
 class ImageUploadField extends StatefulWidget {
   final String hinttext;
+  final void Function(File) onImageSelected;
 
-  const ImageUploadField({Key? key, required this.hinttext}) : super(key: key);
+  const ImageUploadField({
+    Key? key,
+    required this.hinttext,
+    required this.onImageSelected,
+  }) : super(key: key);
 
   @override
-  _ImageUploadFieldState createState() => _ImageUploadFieldState();
+  State<ImageUploadField> createState() => _ImageUploadFieldState();
 }
 
 class _ImageUploadFieldState extends State<ImageUploadField> {
@@ -20,9 +24,11 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      final file = File(pickedFile.path);
       setState(() {
-        _image = File(pickedFile.path);
+        _image = file;
       });
+      widget.onImageSelected(file); // Send image to parent
     }
   }
 
@@ -35,26 +41,28 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
         InkWell(
           onTap: _pickImage,
           child: Container(
-            height: 100,
+            height: 120,
             decoration: BoxDecoration(
-              color: kPrimaryColorPhoto,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: PorderRadiusColor),
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade400),
             ),
             child: _image == null
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.cloud_upload, color: Colors.grey, size: 40),
-                        const SizedBox(height: 5),
-                        Text(widget.hinttext,
-                            style: TextStyle(color: Colors.grey)),
+                        const Icon(Icons.cloud_upload, color: Colors.grey, size: 40),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.hinttext,
+                          style: const TextStyle(color: Colors.grey),
+                        ),
                       ],
                     ),
                   )
                 : ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(10),
                     child: Image.file(
                       _image!,
                       fit: BoxFit.cover,

@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
+
 class SignupParams {
-  final String profileImage;
-  final String idImageFront;
-  final String idImageBack;
+  final MultipartFile profileImage;
+  final MultipartFile idImageFront;
+  final MultipartFile idImageBack;
   final String firstName;
   final String lastName;
   final String userName;
@@ -30,4 +32,23 @@ class SignupParams {
     required this.town,
     required this.address,
   });
+
+  FormData toFormData() {
+    return FormData.fromMap({
+      "ProfileImage": profileImage,
+      "IDImageFront": idImageFront,
+      "IDImageBack": idImageBack,
+      "FirstName": firstName,
+      "LastName": lastName,
+      "UserName": userName,
+      "Email": emailConfirmed,
+      "Password": password,
+      "NationalID": nationalID,
+      "PersonalSummary": personalSummary,
+      "PhoneNumber": phoneNumber,
+      "Governorate": governorate,
+      "Town": town,
+      "Address": address,
+    });
+  }
 }
