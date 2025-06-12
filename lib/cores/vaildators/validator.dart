@@ -23,13 +23,18 @@ class SignupFormValidator {
   }
 
   static String? validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your email';
-    } else if (!value.contains('@') || !value.contains('.')) {
-      return 'Please enter a valid email';
-    }
-    return null;
+  if (value == null || value.trim().isEmpty) {
+    return 'Please enter your email';
   }
+
+  final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+  if (!emailRegex.hasMatch(value.trim())) {
+    return 'Please enter a valid email address';
+  }
+
+  return null;
+}
+
 
   static String? validatePassword(String? value) {
     if (value == null || value.trim().isEmpty) {
