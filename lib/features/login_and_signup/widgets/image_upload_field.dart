@@ -1,10 +1,11 @@
-import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUploadField extends StatefulWidget {
   final String hinttext;
-  final void Function(File) onImageSelected;
+  final void Function(Uint8List imageData, String fileName) onImageSelected;
 
   const ImageUploadField({
     Key? key,
@@ -17,18 +18,26 @@ class ImageUploadField extends StatefulWidget {
 }
 
 class _ImageUploadFieldState extends State<ImageUploadField> {
-  File? _image;
+  Uint8List? _imageData;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      setState(() {
-        _image = file;
-      });
-      widget.onImageSelected(file); // Send image to parent
+      if (kIsWeb) {
+        final imageBytes = await pickedFile.readAsBytes();
+        setState(() {
+          _imageData = imageBytes;
+        });
+        widget.onImageSelected(imageBytes, pickedFile.name);
+      } else {
+        final imageBytes = await pickedFile.readAsBytes();
+        setState(() {
+          _imageData = imageBytes;
+        });
+        widget.onImageSelected(imageBytes, pickedFile.path.split('/').last);
+      }
     }
   }
 
@@ -47,12 +56,13 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.grey.shade400),
             ),
-            child: _image == null
+            child: _imageData == null
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.cloud_upload, color: Colors.grey, size: 40),
+                        const Icon(Icons.cloud_upload,
+                            color: Colors.grey, size: 40),
                         const SizedBox(height: 8),
                         Text(
                           widget.hinttext,
@@ -63,8 +73,8 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.file(
-                      _image!,
+                    child: Image.memory(
+                      _imageData!,
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),

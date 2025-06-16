@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rentora_app/cores/databases/api/api_consumer.dart';
 import 'package:rentora_app/cores/databases/api/endpoints.dart';
 import 'package:rentora_app/cores/databases/api/interceptors.dart';
@@ -12,14 +13,34 @@ import 'package:rentora_app/cores/databases/api/status_codes.dart';
 class DioConsumer implements ApiConsumer {
   final Dio dio;
 
-  DioConsumer({required this.dio}) {
-    // ignore: deprecated_member_use
-    (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-      return client;
-    };
+  // DioConsumer({required this.dio}) {
+  //   // ignore: deprecated_member_use
+  //   (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+  //       (HttpClient client) {
+  //     client.badCertificateCallback =
+  //         (X509Certificate cert, String host, int port) => true;
+  //     return client;
+  //   };
+  //   dio.options
+  //     ..baseUrl = Endpoints.baseUrl
+  //     ..responseType = ResponseType.json
+  //     ..followRedirects = false
+  //     ..validateStatus = (status) => status! < StatusCodes.serverError;
+
+  //   dio.interceptors.add(LoggerInterceptor());
+  //   // dio.interceptors.add(di.sl<LogInterceptor>());
+  // }
+   DioConsumer({required this.dio}) {
+    if (!kIsWeb) {
+      // ignore: deprecated_member_use
+      (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+    }
+
     dio.options
       ..baseUrl = Endpoints.baseUrl
       ..responseType = ResponseType.json
@@ -27,7 +48,6 @@ class DioConsumer implements ApiConsumer {
       ..validateStatus = (status) => status! < StatusCodes.serverError;
 
     dio.interceptors.add(LoggerInterceptor());
-    //dio.interceptors.add(di.sl<LogInterceptor>());
   }
 
   @override

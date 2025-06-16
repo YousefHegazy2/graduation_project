@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentora_app/cores/params/sinup_params.dart';
 import 'package:rentora_app/cores/vaildators/validator.dart';
 import 'package:rentora_app/cores/widgets/Custom_Row_Dropdown.dart';
+import 'package:rentora_app/features/category/widgets/Container_Image.dart';
+import 'package:rentora_app/features/category/widgets/Container_Photo.dart';
 import 'package:rentora_app/features/login_and_signup/cubit/sinup_cubit.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/arrow_back.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_button.dart';
@@ -119,17 +122,15 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                           ),
                           SizedBox(height: 15),
                           ImageUploadField(
-                              onImageSelected: (p0) {
-                                profileImage = p0;
-                              },
-                              hinttext: 'Browse front side of ID card '),
+                            hinttext: 'Browse front side of ID card ',
+                            onImageSelected:
+                                (Uint8List imageData, String fileName) {},
+                          ),
                           SizedBox(height: 15),
                           ImageUploadField(
                             hinttext: 'Browse back side of ID card ',
-                            onImageSelected: (File) {
-                              idImageFront = File;
-                              print('Image selected: ${File.path}');
-                            },
+                            onImageSelected:
+                                (Uint8List imageData, String fileName) {},
                           ),
                           SizedBox(height: 15),
                           const MainText(
@@ -153,78 +154,40 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                               child: CustomButton(
                             buttonName: 'Sign up',
                             onpressed: () async {
-                              if (profileImage != null &&
-                                  idImageFront != null) {
-                                final v = await MultipartFile.fromFile(
+                              context.read<SinupCubit>().sinup(SignupParams(
+                                  firstName: context
+                                      .read<SinupCubit>()
+                                      .firstnameController
+                                      .text,
+                                  lastName: context
+                                      .read<SinupCubit>()
+                                      .lastnameController
+                                      .text,
+                                  userName: widget.name,
+                                  emailConfirmed: widget.email,
+                                  password: widget.password,
+                                  nationalID: context
+                                      .read<SinupCubit>()
+                                      .nationalidController
+                                      .text,
+                                  personalSummary: context
+                                      .read<SinupCubit>()
+                                      .personalsammaryController
+                                      .text,
+                                  phoneNumber: context
+                                      .read<SinupCubit>()
+                                      .phoneController
+                                      .text,
+                                  governorate: '1234',
+                                  town: 'own',
+                                  address: context
+                                      .read<SinupCubit>()
+                                      .addresscontroller
+                                      .text,
+                                  profileImage: await MultipartFile.fromFile(
                                     profileImage!.path,
-                                    contentType: DioMediaType(
-                                        "image", "JPEG"), // أو png حسب الصيغة
-
-                                    filename: 'profile.JPEG');
-                                print('Profile image: ${v}');
-                                context.read<SinupCubit>().sinup(
-                                      SignupParams(
-                                        profileImage:
-                                            await MultipartFile.fromFile(
-                                                profileImage!.path,
-                                                contentType: DioMediaType(
-                                                    "image",
-                                                    "JPEG"), // أو png حسب الصيغة
-
-                                                filename: 'profile.JPEG'),
-                                        idImageFront:
-                                            await MultipartFile.fromFile(
-                                                idImageFront!.path,
-                                                  contentType: DioMediaType(
-                                                    "image",
-                                                    "JPEG"), 
-                                                filename: 'id_front.JPEG'),
-                                        idImageBack: await MultipartFile.fromFile(
-                                            idImageFront!.path,
-                                              contentType: DioMediaType(
-                                                    "image",
-                                                    "JPEG"), 
-                                            filename:
-                                                'id_back.JPEG'), // لو عندك صورة مختلفة للظهر، عدلها هنا
-
-                                        firstName: context
-                                            .read<SinupCubit>()
-                                            .firstnameController
-                                            .text,
-                                        lastName: context
-                                            .read<SinupCubit>()
-                                            .lastnameController
-                                            .text,
-                                        userName: widget.name,
-                                        emailConfirmed: widget.email,
-                                        password: widget.password,
-                                        nationalID: context
-                                            .read<SinupCubit>()
-                                            .nationalidController
-                                            .text,
-                                        personalSummary: context
-                                            .read<SinupCubit>()
-                                            .personalsammaryController
-                                            .text,
-                                        phoneNumber: context
-                                            .read<SinupCubit>()
-                                            .phoneController
-                                            .text,
-                                        governorate: '1234',
-                                        town: 'own',
-                                        address: context
-                                            .read<SinupCubit>()
-                                            .addresscontroller
-                                            .text,
-                                      ),
-                                    );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text('يرجى اختيار الصور المطلوبة')),
-                                );
-                              }
+                                    contentType: DioMediaType("image", "JPEG"),
+                                  )));
                             },
                           )),
                         ],

@@ -12,8 +12,8 @@ class SinupCubit extends Cubit<SinupState> {
   final TextEditingController lastnameController = TextEditingController();
   final TextEditingController nationalidController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  final TextEditingController frontsideidController = TextEditingController();
-  final TextEditingController backsideidController = TextEditingController();
+  // final TextEditingController frontsideidController = TextEditingController();
+  // final TextEditingController backsideidController = TextEditingController();
   final TextEditingController addresscontroller = TextEditingController();
   TextEditingController personalsammaryController = TextEditingController();
 
