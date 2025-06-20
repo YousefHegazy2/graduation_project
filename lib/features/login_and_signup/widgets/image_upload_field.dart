@@ -1,10 +1,10 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUploadField extends StatefulWidget {
   final String hinttext;
-  final void Function(File) onImageSelected;
+  final void Function(Uint8List) onImageSelected;
 
   const ImageUploadField({
     Key? key,
@@ -17,18 +17,18 @@ class ImageUploadField extends StatefulWidget {
 }
 
 class _ImageUploadFieldState extends State<ImageUploadField> {
-  File? _image;
+  Uint8List? _imageBytes;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      final file = File(pickedFile.path);
+      final bytes = await pickedFile.readAsBytes();
       setState(() {
-        _image = file;
+        _imageBytes = bytes;
       });
-      widget.onImageSelected(file); // Send image to parent
+      widget.onImageSelected(bytes); // ترجع image memory
     }
   }
 
@@ -47,7 +47,7 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.grey.shade400),
             ),
-            child: _image == null
+            child: _imageBytes == null
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -63,8 +63,8 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.file(
-                      _image!,
+                    child: Image.memory(
+                      _imageBytes!,
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),
