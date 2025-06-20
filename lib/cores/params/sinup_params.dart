@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 
 class SignupParams {
   final MultipartFile profileImage;
-  // final MultipartFile idImageFront;
-  // final MultipartFile idImageBack;
+   final MultipartFile idImageFront;
+   final MultipartFile idImageBack;
   final String firstName;
   final String lastName;
   final String userName;
@@ -18,8 +18,8 @@ class SignupParams {
 
   SignupParams({
     required this.profileImage,
-    // required this.idImageFront,
-    // required this.idImageBack,
+    required this.idImageFront,
+     required this.idImageBack,
     required this.firstName,
     required this.lastName,
     required this.userName,

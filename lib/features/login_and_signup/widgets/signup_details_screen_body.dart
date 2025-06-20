@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +6,6 @@ import 'package:http_parser/http_parser.dart';
 import 'package:rentora_app/cores/params/sinup_params.dart';
 import 'package:rentora_app/cores/vaildators/validator.dart';
 import 'package:rentora_app/cores/widgets/Custom_Row_Dropdown.dart';
-import 'package:rentora_app/features/category/widgets/Container_Image.dart';
-import 'package:rentora_app/features/category/widgets/Container_Photo.dart';
 import 'package:rentora_app/features/login_and_signup/cubit/sinup_cubit.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/arrow_back.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_button.dart';
@@ -72,166 +69,149 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                       ArrowBack(),
                     ],
                   ),
-                  SizedBox(height: 10),
-                  Form(
-                      key: context.read<SinupCubit>().formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomTextfield(
-                            validator: (value) =>
-                                Validator.validateFirstName(value),
-                            controller:
-                                context.read<SinupCubit>().firstnameController,
-                            labeltext: 'First Name',
-                          ),
-                          SizedBox(height: 15),
-                          CustomTextfield(
-                            validator: (value) =>
-                                Validator.validateLastName(value),
-                            controller:
-                                context.read<SinupCubit>().lastnameController,
-                            labeltext: 'Last Name',
-                          ),
-                          SizedBox(height: 15),
-                          NationalIdTextField(
-                            controller:
-                                context.read<SinupCubit>().nationalidController,
-                            labeltext: 'National ID',
-                          ),
-                          SizedBox(height: 15),
-                          CustomTextfield(
-                            controller: context
-                                .read<SinupCubit>()
-                                .personalsammaryController,
-                            labeltext: 'Personal summary (optional)',
-                          ),
-                          SizedBox(height: 20),
-                          const MainText(
-                            text: 'Contact details',
-                            fontsize: 30,
-                            color: Colors.black,
-                          ),
-                          SizedBox(height: 15),
-                          CustomTextfield(
-                            controller:
-                                context.read<SinupCubit>().phoneController,
-                            hinttext: 'Phone number',
-                          ),
-                          SizedBox(height: 15),
-                          ImageUploadField(
-                              onImageSelected: (p0) {
-                                profileImage = p0;
-                              },
-                              hinttext: 'Browse front side of ID card '),
-                          SizedBox(height: 15),
-                          ImageUploadField(
-                            hinttext: 'Browse back side of ID card ',
-                            onImageSelected: (File) {
-                              idImageFront = File;
-                              print('Image selected: ${File.path}');
-                            },
-                          ),
-                          SizedBox(height: 15),
-                          const MainText(
-                            text: 'Personal address',
-                            fontsize: 30,
-                            color: Colors.black,
-                          ),
-                          SizedBox(height: 5),
-                          CustomRowDropdown(
-                              text3: 'Governerate', text4: 'Town'),
-                          SizedBox(height: 15),
-                          CustomTextfield(
-                            validator: (value) =>
-                                Validator.validateAddress(value),
-                            controller:
-                                context.read<SinupCubit>().addresscontroller,
-                            hinttext: 'Address',
-                          ),
-                          SizedBox(height: 15),
-                          Center(
-                              child: CustomButton(
-                            buttonName: 'Sign up',
-                            onpressed: () async {
-                              if (profileImage != null &&
-                                  idImageFront != null) {
-                                final v = await MultipartFile.fromFile(
-                                    profileImage!.path,
-                                    contentType: DioMediaType(
-                                        "image", "JPEG"), // أو png حسب الصيغة
+                ),
+                const SizedBox(height: 10),
+                Form(
+                  key: context.read<SinupCubit>().formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextfield(
+                        validator: (value) => Validator.validateFirstName(value),
+                        controller: context.read<SinupCubit>().firstnameController,
+                        labeltext: 'First Name',
+                      ),
+                      const SizedBox(height: 15),
+                      CustomTextfield(
+                        validator: (value) => Validator.validateLastName(value),
+                        controller: context.read<SinupCubit>().lastnameController,
+                        labeltext: 'Last Name',
+                      ),
+                      const SizedBox(height: 15),
+                      NationalIdTextField(
+                        controller: context.read<SinupCubit>().nationalidController,
+                        labeltext: 'National ID',
+                      ),
+                      const SizedBox(height: 15),
+                      CustomTextfield(
+                        controller:
+                            context.read<SinupCubit>().personalsammaryController,
+                        labeltext: 'Personal summary (optional)',
+                      ),
+                      const SizedBox(height: 20),
+                      const MainText(
+                        text: 'Contact details',
+                        fontsize: 30,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(height: 15),
+                      CustomTextfield(
+                        controller: context.read<SinupCubit>().phoneController,
+                        hinttext: 'Phone number',
+                      ),
+                      const SizedBox(height: 15),
+                      ImageUploadField(
+                        onImageSelected: (bytes) {
+                          profileImageBytes = bytes;
+                        },
+                        hinttext: 'Browse front side of ID card ',
+                      ),
+                      const SizedBox(height: 15),
+                      ImageUploadField(
+                        onImageSelected: (bytes) {
+                          idImageFrontBytes = bytes;
+                        },
+                        hinttext: 'Browse back side of ID card ',
+                      ),
+                      const SizedBox(height: 15),
+                      const MainText(
+                        text: 'Personal address',
+                        fontsize: 30,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(height: 5),
+                      CustomRowDropdown(text3: 'Governerate', text4: 'Town'),
+                      const SizedBox(height: 15),
+                      CustomTextfield(
+                        validator: (value) => Validator.validateAddress(value),
+                        controller: context.read<SinupCubit>().addresscontroller,
+                        hinttext: 'Address',
+                      ),
+                      const SizedBox(height: 15),
+                      Center(
+                        child: CustomButton(
+                          buttonName: 'Sign up',
+                          onpressed: () async {
+                            if (profileImageBytes != null &&
+                                idImageFrontBytes != null) {
+                              final profileMultipart = MultipartFile.fromBytes(
+                                profileImageBytes!,
+                                contentType: MediaType("image", "jpeg"),
+                                filename: "profile.jpeg",
+                              );
 
-                                    filename: 'profile.JPEG');
-                                print('Profile image: ${v}');
-                                context.read<SinupCubit>().sinup(
-                                      SignupParams(
-                                        profileImage:
-                                            await MultipartFile.fromFile(
-                                                profileImage!.path,
-                                                contentType: DioMediaType(
-                                                    "image",
-                                                    "JPEG"), // أو png حسب الصيغة
+                              final idFrontMultipart = MultipartFile.fromBytes(
+                                idImageFrontBytes!,
+                                contentType: MediaType("image", "jpeg"),
+                                filename: "id_front.jpeg",
+                              );
 
-                                                filename: 'profile.JPEG'),
-                                        idImageFront:
-                                            await MultipartFile.fromFile(
-                                                idImageFront!.path,
-                                                  contentType: DioMediaType(
-                                                    "image",
-                                                    "JPEG"), 
-                                                filename: 'id_front.JPEG'),
-                                        idImageBack: await MultipartFile.fromFile(
-                                            idImageFront!.path,
-                                              contentType: DioMediaType(
-                                                    "image",
-                                                    "JPEG"), 
-                                            filename:
-                                                'id_back.JPEG'), // لو عندك صورة مختلفة للظهر، عدلها هنا
+                              final idBackMultipart = MultipartFile.fromBytes(
+                                idImageFrontBytes!,
+                                contentType: MediaType("image", "jpeg"),
+                                filename: "id_back.jpeg",
+                              );
 
-                                        firstName: context
-                                            .read<SinupCubit>()
-                                            .firstnameController
-                                            .text,
-                                        lastName: context
-                                            .read<SinupCubit>()
-                                            .lastnameController
-                                            .text,
-                                        userName: widget.name,
-                                        emailConfirmed: widget.email,
-                                        password: widget.password,
-                                        nationalID: context
-                                            .read<SinupCubit>()
-                                            .nationalidController
-                                            .text,
-                                        personalSummary: context
-                                            .read<SinupCubit>()
-                                            .personalsammaryController
-                                            .text,
-                                        phoneNumber: context
-                                            .read<SinupCubit>()
-                                            .phoneController
-                                            .text,
-                                        governorate: '1234',
-                                        town: 'own',
-                                        address: context
-                                            .read<SinupCubit>()
-                                            .addresscontroller
-                                            .text,
-                                      ),
-                                    );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text('يرجى اختيار الصور المطلوبة')),
-                                );
-                              }
-                            },
-                          )),
-                        ],
-                      )),
-                ],
-              ),
+                              context.read<SinupCubit>().sinup(
+                                    SignupParams(
+                                      profileImage: profileMultipart,
+                                      idImageFront: idFrontMultipart,
+                                      idImageBack: idBackMultipart,
+                                      firstName: context
+                                          .read<SinupCubit>()
+                                          .firstnameController
+                                          .text,
+                                      lastName: context
+                                          .read<SinupCubit>()
+                                          .lastnameController
+                                          .text,
+                                      userName: widget.name,
+                                      emailConfirmed: widget.email,
+                                      password: widget.password,
+                                      nationalID: context
+                                          .read<SinupCubit>()
+                                          .nationalidController
+                                          .text,
+                                      personalSummary: context
+                                          .read<SinupCubit>()
+                                          .personalsammaryController
+                                          .text,
+                                      phoneNumber: context
+                                          .read<SinupCubit>()
+                                          .phoneController
+                                          .text,
+                                      governorate: '1234',
+                                      town: 'own',
+                                      address: context
+                                          .read<SinupCubit>()
+                                          .addresscontroller
+                                          .text,
+                                    ),
+                                  );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('يرجى اختيار الصور المطلوبة'),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
