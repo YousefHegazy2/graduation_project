@@ -58,7 +58,7 @@ class PickUpPage extends StatelessWidget {
           Positioned(
             top: 55,
             left: 16,
-            child: CustomArrowBack(color: kPrimaryColorWhite),
+            child:  CustomArrowBack(color: Colors.blue,),
           ),
           Positioned(
             bottom: 20,

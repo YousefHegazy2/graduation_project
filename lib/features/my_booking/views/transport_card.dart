@@ -29,7 +29,7 @@ class TransportCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.asset(
-                    "assets/images/car1.jpeg",
+                    "assets/images/car2.jpeg",
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),

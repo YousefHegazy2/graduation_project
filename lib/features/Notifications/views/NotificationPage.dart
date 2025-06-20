@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rentora_app/constant.dart';
 import 'package:rentora_app/features/Notifications/widgets/noti_category.dart';
+import 'package:rentora_app/features/dashboard/views/Dashboard.dart';
 
 
 class NotificationPage extends StatefulWidget {
@@ -57,7 +58,11 @@ class _NotificationPageState extends State<NotificationPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back , size:26 ,color: Colors.white,)),
+                    IconButton(onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+            return MainHomeScreen();
+          }));
+                    }, icon: Icon(Icons.arrow_back , size:26 ,color: Colors.white,)),
                     Padding(
                       padding: const EdgeInsets.only(left: 85),
                       child: Text(

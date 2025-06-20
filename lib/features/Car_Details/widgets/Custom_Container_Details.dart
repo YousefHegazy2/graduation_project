@@ -24,7 +24,7 @@ class _CustomContainerDetailsState extends State<CustomContainerDetails> {
           ),
           Row(
             children: [
-             CustomArrowBack(color: kPrimaryColorWhite),
+               CustomArrowBack(color: Colors.blue,),
               const SizedBox(
                 width: 90,
               ),

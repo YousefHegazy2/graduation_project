@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rentora_app/constant.dart';
 import 'package:rentora_app/cores/widgets/Custom_Arrow_Back.dart';
 import 'package:rentora_app/features/Car_Details/containers/paymentCards.dart';
@@ -17,7 +18,7 @@ class SummaryPage extends StatelessWidget {
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(8),
-          child: CustomArrowBack(color: kPrimaryColorWhite),
+          child: CustomArrowBack(color: Colors.blue,),
         ),
         title: Text(
           'Review Summary',
@@ -128,7 +129,7 @@ class SummaryPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -208,14 +209,14 @@ class SummaryPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
+          const Row(
             children: [
-              Icon(Icons.payment, color: Colors.blue),
-              SizedBox(width: 8),
+              Icon(FontAwesomeIcons.moneyCheckDollar, color: kPrimaryColorBlue, size:26 ,),
+              SizedBox(width: 25),
               Text(
                 'Card',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -227,7 +228,7 @@ class SummaryPage extends StatelessWidget {
             },
             child: Text(
               'Change',
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),
             ),
           ),
         ],

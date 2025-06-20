@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rentora_app/constant.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key});
-
+  const CustomButton({super.key,});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

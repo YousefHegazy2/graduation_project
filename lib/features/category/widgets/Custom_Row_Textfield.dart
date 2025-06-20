@@ -11,13 +11,13 @@ class CustomRowTextfield extends StatelessWidget {
         children: [
           Expanded(
             child: CustomTextfield(edgeInsetsGeometry: EdgeInsets.symmetric(
-              horizontal: 8,vertical: 12
+              horizontal: 12,vertical: 12
             )),
           ),
           SizedBox(width: 20,),
           Expanded(
             child: CustomTextfield(edgeInsetsGeometry: EdgeInsets.symmetric(
-              horizontal: 8,vertical: 12,
+              horizontal: 12,vertical: 12,
             )),
           ),
         ],

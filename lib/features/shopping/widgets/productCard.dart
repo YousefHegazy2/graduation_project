@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:rentora_app/constant.dart';
 import 'package:rentora_app/features/Car_Details/views/Details.dart';
+import 'dart:convert';
 
 class ProductCard extends StatefulWidget {
-  final String imageUrl;
+  final String image;
   final String itemName;
   final String location;
   final String price;
   final VoidCallback onAddPressed;
+  final bool isMemoryImage;
 
   const ProductCard({
     Key? key,
-    required this.imageUrl,
+    required this.image,
     required this.itemName,
     required this.location,
     required this.price,
     required this.onAddPressed,
+    this.isMemoryImage = false,
   }) : super(key: key);
 
   @override
@@ -59,7 +62,9 @@ class _ProductCardState extends State<ProductCard> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: 220,
+                  width: 140,
+                  height: 200,
+                  clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -78,119 +83,78 @@ class _ProductCardState extends State<ProductCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
-                            ),
-                            child: Image.asset(
-                              widget.imageUrl,
-                              width: double.infinity,
-                              height: 90,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: MouseRegion(
-                              onEnter: (_) {
-                                setState(() {
-                                  favIconScale =
-                                      1.3; 
-                                });
-                              },
-                              onExit: (_) {
-                                setState(() {
-                                  favIconScale =
-                                      1.0; 
-                                });
-                              },
-                              child: TweenAnimationBuilder(
-                                tween:
-                                    Tween<double>(begin: 1.0, end: favIconScale),
-                                duration: Duration(milliseconds: 150),
-                                curve: Curves.easeInOut,
-                                builder: (context, double value, child) {
-                                  return Transform.scale(
-                                    scale: value,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          isFavorite = !isFavorite;
-                                        });
-                                      },
-                                      child: Icon(
-                                        isFavorite
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color:
-                                            isFavorite ? kPrimaryColorBlue : Colors.grey,
-                                        size: 24,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                widget.itemName,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 120,
+                          child: widget.isMemoryImage
+                              ? Image.memory(
+                                  base64Decode(widget.image),
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  widget.image,
+                                  fit: BoxFit.cover,
                                 ),
-                                overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.itemName,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
-                              SizedBox(height: 3),
-                              Text(
-                                widget.location,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 14),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 3),
-                              Text(
-                                "Available",
-                                style:
-                                    TextStyle(color: Colors.green, fontSize: 14),
-                              ),
-                              Spacer(),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              widget.location,
+                              style: TextStyle(color: Colors.grey, fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              "Available",
+                              style: TextStyle(color: Colors.green, fontSize: 14),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 2),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
                                     widget.price,
                                     style: TextStyle(
                                       color: kPrimaryColorBlue,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: Container(
-                                      
-                                      child: IconButton(onPressed: () {  }, icon: Icon(Icons.add_box , size: 28,color: kPrimaryColorBlue,),
-                                     
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                                IconButton(
+                                  onPressed: widget.onAddPressed,
+                                  icon: Icon(Icons.add_box, size: 20, color: kPrimaryColorBlue),
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ],

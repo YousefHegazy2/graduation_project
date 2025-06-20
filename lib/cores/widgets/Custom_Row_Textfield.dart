@@ -5,19 +5,19 @@ class CustomRowTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 75),
+    return const Padding(
+      padding: EdgeInsets.only(right: 75),
       child: Row(
         children: [
           Expanded(
             child: CustomTextfield(edgeInsetsGeometry: EdgeInsets.symmetric(
-              vertical: 12
+              vertical: 12,horizontal: 8
             )),
           ),
           SizedBox(width: 20,),
           Expanded(
             child: CustomTextfield(edgeInsetsGeometry: EdgeInsets.symmetric(
-              vertical: 12,
+              vertical: 12,horizontal: 8
             )),
           ),
         ],

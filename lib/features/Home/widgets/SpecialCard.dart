@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rentora_app/constant.dart';
 import 'package:rentora_app/features/Car_Details/views/Details.dart';
+import 'dart:convert';
 
 
 class SpecialCard extends StatefulWidget {
@@ -9,6 +10,7 @@ class SpecialCard extends StatefulWidget {
   final String location;
   final String price;
   final VoidCallback onFavoritePressed;
+  final bool isMemoryImage;
 
   const SpecialCard({
     Key? key,
@@ -17,6 +19,7 @@ class SpecialCard extends StatefulWidget {
     required this.location,
     required this.price,
     required this.onFavoritePressed,
+    this.isMemoryImage = false,
   }) : super(key: key);
 
   @override
@@ -49,7 +52,7 @@ class _SpecialCardState extends State<SpecialCard> {
             duration: Duration(milliseconds: 200),
             curve: Curves.easeInOut,
             child: Container(
-              width: 190,
+              width: 160,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -72,11 +75,17 @@ class _SpecialCardState extends State<SpecialCard> {
                         topLeft: Radius.circular(12),
                         topRight: Radius.circular(12),
                       ),
-                      child: Image.asset(
-                        widget.imageUrl,
-                        width: double.infinity,
-                        height: 130,
-                        fit: BoxFit.cover,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: widget.isMemoryImage
+                            ? Image.memory(
+                                base64Decode(widget.imageUrl),
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                widget.imageUrl,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                   ),

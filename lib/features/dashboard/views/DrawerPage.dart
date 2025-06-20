@@ -11,16 +11,20 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        decoration: BoxDecoration(gradient: KPrimaryMix2),
+        decoration: BoxDecoration(
+          gradient: KPrimaryMix2
+        ),
+        
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              decoration: BoxDecoration(gradient: KPrimaryMix2),
+              decoration: BoxDecoration(
+                gradient: KPrimaryMix2
+              ),
               accountName: Text(
                 "Welcome Amged!",
-                style: TextStyle(
-                    fontSize: 22, color: Colors.white, fontFamily: 'Nunito'),
+                style: TextStyle(fontSize: 22, color: Colors.white, fontFamily: 'Nunito'),
               ),
               accountEmail: null,
               currentAccountPicture: CircleAvatar(
@@ -42,7 +46,7 @@ class AppDrawer extends StatelessWidget {
               text: "Preview",
               onTap: () {
                 Navigator.pop(context);
-
+                
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -55,8 +59,8 @@ class AppDrawer extends StatelessWidget {
               icon: Icons.edit,
               text: "Edit Profile",
               onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
+                Navigator.pop(context); 
+                  Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ManagementPage(),

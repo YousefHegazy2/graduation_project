@@ -3,7 +3,6 @@ import 'package:rentora_app/constant.dart';
 
 class ContainerPhoto extends StatelessWidget {
   const ContainerPhoto({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Container(

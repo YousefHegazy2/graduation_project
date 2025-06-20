@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:rentora_app/constant.dart';
 
 class CustomArrowBack extends StatelessWidget {
-  CustomArrowBack({super.key,required this.color});
-  Color color;
+  final Color color;
+
+  const CustomArrowBack({super.key, required this.color});
 
   @override
   Widget build(BuildContext context) {

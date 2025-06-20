@@ -108,7 +108,7 @@ class _ProductPageState extends State<ProductPage> {
                         itemBuilder: (context, index) {
                           final product = products[index];
                           return ProductCard(
-                            imageUrl: product.imageUrl ?? '',
+                            image: product.imageUrl ?? '',
                             itemName: product.name ?? '',
                             location: '',
                             onAddPressed: () {},

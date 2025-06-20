@@ -5,8 +5,14 @@ import 'package:rentora_app/features/Home/widgets/BannerCard.dart';
 import 'package:rentora_app/features/Home/widgets/CategoryIcon.dart';
 import 'package:rentora_app/features/Home/widgets/SpecialCard.dart';
 import 'package:rentora_app/features/Home/widgets/popularCard.dart';
+import 'package:rentora_app/features/category/Models/Electronic_Model.dart';
+import 'package:rentora_app/features/category/Models/Travel_Model.dart';
 import 'package:rentora_app/features/category/views/Category_Page.dart';
 import 'package:rentora_app/features/dashboard/views/DrawerPage.dart';
+import 'package:rentora_app/features/category/Models/Sport_Model.dart';
+import 'package:rentora_app/features/category/Models/Transportation_Model.dart';
+import 'package:rentora_app/shared/global_lists.dart';
+
 
 class Homepage extends StatefulWidget {
   @override
@@ -61,6 +67,19 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args != null && args is TravelModel) {
+      if (!travels.contains(args)) {
+        setState(() {
+          travels.add(args);
+        });
+      }
+    }
+  }
+
   Widget _buildHeader() {
     return Container(
       height: 170,
@@ -68,7 +87,7 @@ class _HomepageState extends State<Homepage> {
         scrollDirection: Axis.horizontal,
         children: const [
           BannerCard(imageUrl: "assets/images/banner1.jpg"),
-            BannerCard(imageUrl: "assets/images/banner2.jpg"),
+          BannerCard(imageUrl: "assets/images/banner2.jpg"),
           BannerCard(imageUrl: "assets/images/banner3.jpg"),
           BannerCard(imageUrl: "assets/images/banner4.jpg"),
           BannerCard(imageUrl: "assets/images/banner5.jpg"),
@@ -85,20 +104,39 @@ class _HomepageState extends State<Homepage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionTitle("Categories",(){
-            Navigator.push(
+          _SectionTitle("Categories", () async {
+            final result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => CategoryPage(),
               ),
             );
+            if (result != null && result is TravelModel) {
+              setState(() {
+                travels.add(result);
+              });
+            }
+            if (result != null && result is ElectronicModel) {
+              setState(() {
+                electronics.add(result);
+              });
+            }
+            if (result != null && result is SportModel) {
+              setState(() {
+                sports.add(result);
+              });
+            }
+            if (result != null && result is TransportationModel) {
+              setState(() {
+                transportations.add(result);
+              });
+            }
           }),
             SizedBox(height: 10),
            _CategoryList(),
           _SectionTitle("Nearest For You",(){}),
           SizedBox(height: 10),
-          _SpecialCardList(),
-          SizedBox(height: 20),
+          _AllCardsList(),
           _SectionTitle("Popular", (){}),
           SizedBox(height: 10),
           _PopularCardList(),
@@ -157,37 +195,63 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _SpecialCardList() {
+  Widget _AllCardsList() {
+    final allCards = [
+      ...travels.map((travel) => SpecialCard(
+        imageUrl: travel.image,
+        itemName: travel.name,
+        location: travel.location,
+        price: '${travel.price.toStringAsFixed(2)}',
+        onFavoritePressed: () {},
+        isMemoryImage: true,
+      )),
+      ...electronics.map((electronic) => SpecialCard(
+        imageUrl: electronic.image,
+        itemName: electronic.name,
+        location: electronic.location,
+        price: '${electronic.price.toStringAsFixed(2)}',
+        onFavoritePressed: () {},
+        isMemoryImage: true,
+      )),
+      ...sports.map((sport) => SpecialCard(
+        imageUrl: sport.image,
+        itemName: sport.name,
+        location: sport.location,
+        price: '${sport.price.toStringAsFixed(2)}',
+        onFavoritePressed: () {},
+        isMemoryImage: true,
+      )),
+      ...transportations.map((trans) => SpecialCard(
+        imageUrl: trans.image,
+        itemName: trans.name,
+        location: trans.location,
+        price: '${trans.price.toStringAsFixed(2)}',
+        onFavoritePressed: () {},
+        isMemoryImage: true,
+      )),
+      SpecialCard(
+          imageUrl: 'assets/images/tent2.jpeg',
+          itemName: 'Tent',
+          location: 'Nasr City, Cairo',
+          price: '\$25.00',
+          onFavoritePressed: () {}),
+      SpecialCard(
+          imageUrl: 'assets/images/tennis.jpeg',
+          itemName: 'Tennis',
+          location: 'Nasr city',
+          price: '\$160.00',
+          onFavoritePressed: () {}),
+    ];
     return SizedBox(
-      height: 280,
-      child: ListView(
+      height: 300,
+      child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        children: [
-          SpecialCard(
-              imageUrl: 'assets/images/tent2.jpeg',
-              itemName: 'Tent',
-              location: 'Nasr City, Cairo',
-              price: '\$25.00 ',
-              onFavoritePressed: () {}),
-          SpecialCard(
-              imageUrl: 'assets/images/tennis.jpeg',
-              itemName: 'Tennis',
-              location: 'Nasr city',
-              price: '\$160.00 ',
-              onFavoritePressed: () {}),
-          SpecialCard(
-              imageUrl: 'assets/images/golf.jpeg',
-              itemName: 'Golf',
-              location: 'Dahab',
-              price: '\$400.00 ',
-              onFavoritePressed: () {}),
-          SpecialCard(
-              imageUrl: 'assets/images/camera.jpeg',
-              itemName: 'Nikon Camera',
-              location: 'Quesna',
-              price: '\$200.00 ',
-              onFavoritePressed: () {}),
-        ],
+        child: Row(
+          children: allCards.map((card) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: card,
+          )).toList(),
+        ),
       ),
     );
   }

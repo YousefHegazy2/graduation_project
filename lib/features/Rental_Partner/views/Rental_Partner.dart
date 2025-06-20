@@ -42,7 +42,7 @@ class _RentalPartnerState extends State<RentalPartner>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomArrowBack(color: kPrimaryColorWhite),
+                CustomArrowBack(color: Colors.blue,),
                 Text(
                   'Rental Partner',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

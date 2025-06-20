@@ -15,7 +15,7 @@ class CustomDrodown extends StatelessWidget {
     return DropdownButtonFormField(
       decoration: InputDecoration(
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 12, horizontal: 2),
+              const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
           filled: true,
           fillColor: kPrimaryColorPhoto,
           border: OutlineInputBorder(

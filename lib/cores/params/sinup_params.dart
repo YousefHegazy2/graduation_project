@@ -1,9 +1,9 @@
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 
 class SignupParams {
-  final MultipartFile profileImage;
-   final MultipartFile idImageFront;
-   final MultipartFile idImageBack;
+  final dio.MultipartFile profileImage;
+  final dio.MultipartFile idImageFront;
+  final dio.MultipartFile idImageBack;
   final String firstName;
   final String lastName;
   final String userName;
@@ -19,7 +19,7 @@ class SignupParams {
   SignupParams({
     required this.profileImage,
     required this.idImageFront,
-     required this.idImageBack,
+    required this.idImageBack,
     required this.firstName,
     required this.lastName,
     required this.userName,
@@ -33,11 +33,11 @@ class SignupParams {
     required this.address,
   });
 
-  FormData toFormData() {
-    return FormData.fromMap({
+  dio.FormData toFormData() {
+    return dio.FormData.fromMap({
       "ProfileImage": profileImage,
-      // "IDImageFront": idImageFront,
-      // "IDImageBack": idImageBack,
+      "IDImageFront": idImageFront,
+      "IDImageBack": idImageBack,
       "FirstName": firstName,
       "LastName": lastName,
       "UserName": userName,

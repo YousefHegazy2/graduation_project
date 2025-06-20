@@ -2,58 +2,70 @@ import 'package:flutter/material.dart';
 import 'package:rentora_app/constant.dart';
 import 'package:rentora_app/cores/widgets/CustomAppBar.dart';
 import 'package:rentora_app/cores/widgets/Custom_Category_Textfield.dart';
+import 'package:rentora_app/features/dashboard/views/Dashboard.dart';
 import 'package:rentora_app/features/shopping/widgets/productCard.dart';
+import 'package:rentora_app/shared/global_lists.dart';
 
 
 class ProductsPage extends StatelessWidget {
-  final List<Map<String, String>> products = [
-    {
-      "imageUrl": "assets/images/rent1.png",
-      "itemName": "BMW-2-gran-c...",
-      "location": "Nasr City, Cairo",
-      "price": "\$25.00 /day"
-    },
-    {
-      "imageUrl": "assets/images/rent2.png",
-      "itemName": "Motorcycle",
-      "location": "Nasr City, Cairo",
-      "price": "\$25.00 /day"
-    },
-    {
-      "imageUrl": "assets/images/rent3.png",
-      "itemName": "Electric Bike",
-      "location": "Nasr City, Cairo",
-      "price": "\$25.00 /day"
-    },
-    {
-      "imageUrl": "assets/images/rent4.png",
-      "itemName": "Pickup Truck",
-      "location": "Nasr City, Cairo",
-      "price": "\$25.00 /day"
-    },
-    {
-      "imageUrl": "assets/images/rent1.png",
-      "itemName": "BMW-2-gran-c...",
-      "location": "Nasr City, Cairo",
-      "price": "\$25.00 /day"
-    },
-    {
-      "imageUrl": "assets/images/rent2.png",
-      "itemName": "Motorcycle",
-      "location": "Nasr City, Cairo",
-      "price": "\$25.00 /day"
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final allProducts = [
+      ...travels.map((item) => {
+        "image": item.image,
+        "name": item.name,
+        "location": item.location,
+        "price": item.price.toStringAsFixed(2),
+      }),
+      ...electronics.map((item) => {
+        "image": item.image,
+        "name": item.name,
+        "location": item.location,
+        "price": item.price.toStringAsFixed(2),
+      }),
+      ...sports.map((item) => {
+        "image": item.image,
+        "name": item.name,
+        "location": item.location,
+        "price": item.price.toStringAsFixed(2),
+      }),
+      ...transportations.map((item) => {
+        "image": item.image,
+        "name": item.name,
+        "location": item.location,
+        "price": item.price.toStringAsFixed(2),
+      }),
+    ];
+
+    // Add default cards if the list is empty
+    if (allProducts.isEmpty) {
+      allProducts.addAll([
+        {
+          "image": 'assets/images/tent2.jpeg',
+          "name": 'Tent',
+          "location": 'Nasr City, Cairo',
+          "price": '25.00',
+          //"isMemoryImage": false,
+        },
+        {
+          "image": 'assets/images/tennis.jpeg',
+          "name": 'Tennis',
+          "location": 'Nasr city',
+          "price": '160.00',
+          //"isMemoryImage": false,
+        },
+      ]);
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         icon1: Icon(Icons.arrow_back, size: 26, color: const Color.fromARGB(255, 248, 248, 248)),
         icon2: Icon(Icons.shopping_cart, size: 24, color: kPrimaryColorBlue),
         onPressedIcon1: () {
-       
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return MainHomeScreen();
+          }));
         },
         onPressedIcon2: () {
           print("Shopping Cart Clicked");
@@ -72,15 +84,17 @@ class ProductsPage extends StatelessWidget {
                     mainAxisSpacing: 10,
                     childAspectRatio: 0.72, 
                   ),
-                  itemCount: products.length,
+                  itemCount: allProducts.length,
                   itemBuilder: (context, index) {
+                    final product = allProducts[index];
                     return ProductCard(
-                      imageUrl: products[index]["imageUrl"]!,
-                      itemName: products[index]["itemName"]!,
-                      location: products[index]["location"]!,
-                      price: products[index]["price"]!,
+                      image: product["image"]!,
+                      itemName: product["name"]!,
+                      location: product["location"]!,
+                      price: product["price"]!,
+                      isMemoryImage: product["image"] != null && product["image"].toString().startsWith('assets/') ? false : true,
                       onAddPressed: () {
-                        print("${products[index]["itemName"]} added to cart");
+                        print("${product["name"]} added to cart");
                       },
                     );
                   },
