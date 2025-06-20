@@ -1,10 +1,10 @@
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUploadField extends StatefulWidget {
   final String hinttext;
-  final void Function(Uint8List) onImageSelected;
+  final void Function(File) onImageSelected;
 
   const ImageUploadField({
     Key? key,
@@ -17,18 +17,18 @@ class ImageUploadField extends StatefulWidget {
 }
 
 class _ImageUploadFieldState extends State<ImageUploadField> {
-  Uint8List? _imageBytes;
+  File? _image;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
+      final file = File(pickedFile.path);
       setState(() {
-        _imageBytes = bytes;
+        _image = file;
       });
-      widget.onImageSelected(bytes); // ترجع image memory
+      widget.onImageSelected(file); // Send image to parent
     }
   }
 
@@ -47,12 +47,13 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.grey.shade400),
             ),
-            child: _imageBytes == null
+            child: _image == null
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.cloud_upload, color: Colors.grey, size: 40),
+                        const Icon(Icons.cloud_upload,
+                            color: Colors.grey, size: 40),
                         const SizedBox(height: 8),
                         Text(
                           widget.hinttext,
@@ -63,8 +64,8 @@ class _ImageUploadFieldState extends State<ImageUploadField> {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.memory(
-                      _imageBytes!,
+                    child: Image.file(
+                      _image!,
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),

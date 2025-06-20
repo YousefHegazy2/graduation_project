@@ -12,6 +12,7 @@ import 'package:rentora_app/features/login_and_signup/widgets/custom_password_te
 import 'package:rentora_app/features/login_and_signup/widgets/custom_text.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_text_textfield.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/google_icon.dart';
+import 'package:rentora_app/features/login_and_signup/widgets/image_upload_field.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/left_top_image.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/main_text.dart';
 
@@ -25,8 +26,9 @@ class loginscreenbody extends StatelessWidget {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-         CacheHelper.sharedPreferences.setString('token', state.massage.data!.token);
-      final token =   CacheHelper.sharedPreferences.getString('token');
+          CacheHelper.sharedPreferences
+              .setString('token', state.massage.data!.token);
+          final token = CacheHelper.sharedPreferences.getString('token');
           print('Token: $token');
           Navigator.pushReplacement(
             context,
@@ -112,11 +114,11 @@ class loginscreenbody extends StatelessWidget {
                       builder: (context, state) {
                         return state is LoginFailure
                             ? Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(state.error,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(color: Colors.red)),
-                            )
+                                alignment: Alignment.centerLeft,
+                                child: Text(state.error,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(color: Colors.red)),
+                              )
                             : Container();
                       },
                     ),
@@ -138,9 +140,8 @@ class loginscreenbody extends StatelessWidget {
                                     .text,
                               ),
                             );
-                            context.read<LoginCubit>().emailController.clear();
-                            context.read<LoginCubit>().passwordController.clear();
-
+                        context.read<LoginCubit>().emailController.clear();
+                        context.read<LoginCubit>().passwordController.clear();
                       },
                     ),
                     const SizedBox(height: 15),

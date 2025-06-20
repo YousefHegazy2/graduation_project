@@ -13,57 +13,49 @@ class LoginAndSinupRepo {
   final ApiConsumer apiConsumer;
   LoginAndSinupRepo(this.apiConsumer);
 
-
   Future<Either<Failure, SignupModel>> sinup(SignupParams signupParams) async {
     try {
-      final data =FormData.fromMap({
-    'ProfileImage': signupParams.profileImage,
-    'IDImageFront': signupParams.idImageFront,
-    'IDImageBack': signupParams.idImageBack,
-    'FirstName': signupParams.firstName,
-    'LastName': signupParams.lastName,
-    'UserName': signupParams.userName,
-    'Email': signupParams.emailConfirmed,
-    'Password': signupParams.password,
-    'NationalID': signupParams.nationalID,
-    'Personal_summary': signupParams.personalSummary,
-    'PhoneNumber': signupParams.phoneNumber,
-    'Governorate': signupParams.governorate,
-    'Town': signupParams.town,
-    'Address': signupParams.address, }
+      final data = FormData.fromMap({
+        'ProfileImage': signupParams.profileImage,
+        // 'IDImageFront': signupParams.idImageFront,
+        // 'IDImageBack': signupParams.idImageBack,
+        'FirstName': signupParams.firstName,
+        'LastName': signupParams.lastName,
+        'UserName': signupParams.userName,
+        'Email': signupParams.emailConfirmed,
+        'Password': signupParams.password,
+        'NationalID': signupParams.nationalID,
+        'Personal_summary': signupParams.personalSummary,
+        'PhoneNumber': signupParams.phoneNumber,
+        'Governorate': signupParams.governorate,
+        'Town': signupParams.town,
+        'Address': signupParams.address,
+      });
+      final response =
+          await apiConsumer.post(path: Endpoints.sinup, data: data);
+      return response.fold(
+        (l) => Left(Failure(errMessage: l)),
+        (r) => Right(SignupModel.fromJson(r.data)),
       );
-  final response =
-      await apiConsumer.post(
-        
-        path: Endpoints.sinup , 
-        isFormData: true
-        ,data: data);
-return response.fold(
-  (l) => Left(Failure(errMessage: l)),
-  (r) => Right(SignupModel.fromJson(r.data)),
-);
- 
-}  on CacheExeption catch (e) {
-        return Left(Failure(errMessage: e.errorMessage));
-      }
-}
+    } on CacheExeption catch (e) {
+      return Left(Failure(errMessage: e.errorMessage));
+    }
+  }
 
-
- Future<Either<Failure, LoginModel>> login(LoginParams loginParams)async {
-  try {
-     final data ={
+  Future<Either<Failure, LoginModel>> login(LoginParams loginParams) async {
+    try {
+      final data = {
         'email': loginParams.email,
         'password': loginParams.password,
       };
-      final response = await apiConsumer.post(
-          path: Endpoints.login,  data: data);
+      final response =
+          await apiConsumer.post(path: Endpoints.login, data: data);
       return response.fold(
         (l) => Left(Failure(errMessage: l)),
         (r) => Right(LoginModel.fromJson(r.data)),
       );
-  }on CacheExeption catch (e) {
-    return Left(Failure(errMessage: e.errMessage));
+    } on CacheExeption catch (e) {
+      return Left(Failure(errMessage: e.errMessage));
+    }
   }
- }
-
 }
