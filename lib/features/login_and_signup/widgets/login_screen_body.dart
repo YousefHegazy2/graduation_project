@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentora_app/cores/databases/cache/cache_helper.dart';
 import 'package:rentora_app/cores/params/login_params.dart';
 import 'package:rentora_app/cores/vaildators/validator.dart';
+import 'package:rentora_app/features/Admin/views/managementPage.dart';
 import 'package:rentora_app/features/Home/views/HomePage.dart';
 import 'package:rentora_app/features/login_and_signup/cubit/login_cubit.dart';
 import 'package:rentora_app/features/login_and_signup/views/forget_password_screen.dart';
@@ -12,7 +13,6 @@ import 'package:rentora_app/features/login_and_signup/widgets/custom_password_te
 import 'package:rentora_app/features/login_and_signup/widgets/custom_text.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_text_textfield.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/google_icon.dart';
-import 'package:rentora_app/features/login_and_signup/widgets/image_upload_field.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/left_top_image.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/main_text.dart';
 
@@ -26,21 +26,30 @@ class loginscreenbody extends StatelessWidget {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
+          final email = state.massage.data!.email;
+
+          // تخزين التوكن
           CacheHelper.sharedPreferences
               .setString('token', state.massage.data!.token);
           final token = CacheHelper.sharedPreferences.getString('token');
           print('Token: $token');
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Homepage(),
-            ),
-          );
+
+          if (email == 'yousef1@gmail.com') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ManagementPage()),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Homepage()),
+            );
+          }
         } else if (state is LoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content:
-                    Text(state.error, style: TextStyle(color: Colors.white))),
+              content: Text(state.error, style: TextStyle(color: Colors.white)),
+            ),
           );
         }
       },
@@ -49,7 +58,7 @@ class loginscreenbody extends StatelessWidget {
           children: [
             LeftTopImage(),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 125),
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 105),
               child: Form(
                 key: context.read<LoginCubit>().formKey,
                 child: Column(

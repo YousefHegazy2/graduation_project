@@ -14,10 +14,10 @@ import 'package:rentora_app/features/login_and_signup/widgets/terms_and_conditio
 import 'package:flutter/material.dart';
 
 class SinupScreenBody extends StatelessWidget {
-   SinupScreenBody({
+  SinupScreenBody({
     super.key,
   });
- late BuildContext context2 ;
+  late BuildContext context2;
   @override
   Widget build(BuildContext context) {
     context2 = context;
@@ -26,7 +26,7 @@ class SinupScreenBody extends StatelessWidget {
         children: [
           const LeftTopImage(),
           Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 125),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 105),
             child: Form(
               key: context.read<SinupCubit>().formKey,
               child: Column(
@@ -57,7 +57,7 @@ class SinupScreenBody extends StatelessWidget {
                   //  ******************    the textfield for email
                   const CustomText(text: 'Email'),
                   CustomTextfield(
-                    validator: (v)=>Validator.validateEmail(v),
+                    validator: (v) => Validator.validateEmail(v),
                     hinttext: 'example@gmail.com',
                     controller: context.read<SinupCubit>().emailController,
                   ),
@@ -86,16 +86,25 @@ class SinupScreenBody extends StatelessWidget {
                             .formKey
                             .currentState!
                             .validate()) {
-                              Navigator.push(context2, MaterialPageRoute(
+                          Navigator.push(context2, MaterialPageRoute(
                             builder: (context2) {
-                              return  SignupDetails(
-                                name: context.read<SinupCubit>().nameController.text,
-                                email: context.read<SinupCubit>().emailController.text,
-                                password: context.read<SinupCubit>().passwordController.text,
+                              return SignupDetails(
+                                name: context
+                                    .read<SinupCubit>()
+                                    .nameController
+                                    .text,
+                                email: context
+                                    .read<SinupCubit>()
+                                    .emailController
+                                    .text,
+                                password: context
+                                    .read<SinupCubit>()
+                                    .passwordController
+                                    .text,
                               );
                             },
                           ));
-                            }
+                        }
                       }),
                   const SizedBox(height: 5),
 

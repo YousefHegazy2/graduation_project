@@ -77,25 +77,30 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextfield(
-                        validator: (value) => Validator.validateFirstName(value),
-                        controller: context.read<SinupCubit>().firstnameController,
+                        validator: (value) =>
+                            Validator.validateFirstName(value),
+                        controller:
+                            context.read<SinupCubit>().firstnameController,
                         labeltext: 'First Name',
                       ),
                       const SizedBox(height: 15),
                       CustomTextfield(
                         validator: (value) => Validator.validateLastName(value),
-                        controller: context.read<SinupCubit>().lastnameController,
+                        controller:
+                            context.read<SinupCubit>().lastnameController,
                         labeltext: 'Last Name',
                       ),
                       const SizedBox(height: 15),
                       NationalIdTextField(
-                        controller: context.read<SinupCubit>().nationalidController,
+                        controller:
+                            context.read<SinupCubit>().nationalidController,
                         labeltext: 'National ID',
                       ),
                       const SizedBox(height: 15),
                       CustomTextfield(
-                        controller:
-                            context.read<SinupCubit>().personalsammaryController,
+                        controller: context
+                            .read<SinupCubit>()
+                            .personalsammaryController,
                         labeltext: 'Personal summary (optional)',
                       ),
                       const SizedBox(height: 20),
@@ -129,12 +134,11 @@ class _SignUpDetailsBodyState extends State<SignUpDetailsBody> {
                         fontsize: 30,
                         color: Colors.black,
                       ),
-                      const SizedBox(height: 5),
-                      CustomRowDropdown(text3: 'Governerate', text4: 'Town'),
                       const SizedBox(height: 15),
                       CustomTextfield(
                         validator: (value) => Validator.validateAddress(value),
-                        controller: context.read<SinupCubit>().addresscontroller,
+                        controller:
+                            context.read<SinupCubit>().addresscontroller,
                         hinttext: 'Address',
                       ),
                       const SizedBox(height: 15),

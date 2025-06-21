@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentora_app/features/login_and_signup/cubit/forgetpassword_cubit.dart';
+import 'package:rentora_app/features/login_and_signup/views/pin_code_screen.dart';
 import 'package:rentora_app/features/login_and_signup/views/set_new_password.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_button.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/custom_text.dart';
@@ -21,7 +22,6 @@ class ForgetPasswordBody extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 120),
         child: Form(
-          key: context.read<ForgetpasswordCubit>().formKey,
           child: Column(
             children: [
               Image.asset('assets/images/forget password.png'),
@@ -44,9 +44,8 @@ class ForgetPasswordBody extends StatelessWidget {
               //  ************  the Email textfield
               const CustomText(text: 'Email'),
               CustomTextfield(
-                hinttext: 'example@gmail.com',
-                controller: context.read<ForgetpasswordCubit>().emailController,
-              ),
+                  hinttext: 'example@gmail.com',
+                  controller: TextEditingController()),
 
               const SizedBox(height: 50),
 
@@ -56,7 +55,7 @@ class ForgetPasswordBody extends StatelessWidget {
                 onpressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
-                      return SetNewPassword();
+                      return PinCodeScreen('');
                     },
                   ));
                 },

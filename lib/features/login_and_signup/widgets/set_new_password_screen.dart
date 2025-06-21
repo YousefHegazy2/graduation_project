@@ -50,9 +50,8 @@ class SetNewPasswordScreen extends StatelessWidget {
                 key: context.read<SetnewpasswordCubit>().formKey,
                 child: Column(
                   children: [
-
                     //  ***************  the password textfield
-                    
+
                     const CustomText(text: 'Password'),
                     CustomPasswordTextfield(
                       hinttext: '. . . . . . . . . . .',

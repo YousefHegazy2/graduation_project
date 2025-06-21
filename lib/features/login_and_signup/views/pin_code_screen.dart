@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:rentora_app/features/login_and_signup/views/set_new_password.dart';
 import 'package:rentora_app/features/login_and_signup/widgets/left_top_image.dart';
 
 class PinCodeScreen extends StatefulWidget {
@@ -112,7 +113,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                     ),
                     animationDuration: const Duration(milliseconds: 300),
                     boxShadows: [
-                       BoxShadow(
+                      BoxShadow(
                         blurStyle: BlurStyle.outer,
                         color: Colors.black12, // shadow effect
                         blurRadius: 6,
@@ -161,40 +162,46 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
               //   ******************    the button
               const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF1A73E8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF1A73E8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      if (currentText != generatedPin) {
-                        errorController.add(ErrorAnimationType.shake);
-                        setState(() => hasError = true);
-                        textEditingController.clear();
-                      } else {
-                        setState(() => hasError = false);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("Verification Successful!")),
-                        );
-                        textEditingController.clear();
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        if (currentText != generatedPin) {
+                          errorController.add(ErrorAnimationType.shake);
+                          setState(() => hasError = true);
+                          textEditingController.clear();
+                        } else {
+                          setState(() => hasError = false);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Verification Successful!")),
+                          );
+                          textEditingController.clear();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SetNewPassword(),
+                            ),
+                          );
+                        }
                       }
-                    }
-                  },
-                  child: const Text(
-                    "VERIFY",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                    },
+                    child: const Text(
+                      "VERIFY",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ),
-              ),
+                  )),
 
               //  ************************   the text for resend the code
               const SizedBox(height: 20),
@@ -209,10 +216,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           _generateNewPin();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text("New code sent: $generatedPin")),
-                          );
+                          ScaffoldMessenger.of(context).clearSnackBars();
                         },
                       style: const TextStyle(
                         color: Colors.blue,
@@ -229,4 +233,3 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     );
   }
 }
- 
